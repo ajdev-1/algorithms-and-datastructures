@@ -16,10 +16,16 @@ const childPositions = Object.freeze({
 class Heap {
   #type;
   #heap;
+  #size;
 
-  constructor(type = heapTypes.min){
+  constructor(type = heapTypes.min, values = []){
     this.#type = type;
-    this.#heap = [null];
+    if (values.length > 0) {
+      this.build(values);
+      this.#size = this.#heap.length - 1;
+    } else {
+      this.#heap = [null];
+    }
     console.log(`Instantiated a ${this.#type}-heap.`);
   }
 
@@ -58,7 +64,14 @@ class Heap {
     }
   }
 
-  sort () { }
+  sort () {
+    let heapLength = this.size;
+    for (let nodeIndex=heapLength; nodeIndex>1; nodeIndex--) {
+      [this.#heap[1], this.#heap[nodeIndex]] = [this.#heap[nodeIndex], this.#heap[1]];
+      this.#size -= 1;
+      this.#heapifyNode(1);
+    }
+  }
 
   // TO-DO: Do not use heapify on every node.
   build (array) {
@@ -105,28 +118,31 @@ class Heap {
   #isLargerThanParent = (nodeIndex) => this.#heap[nodeIndex] > this.#heap[this.#getParentIndex(nodeIndex)];
 
   // Checks for node - children relation
+  // TO-DO: check whether left or right child is the largest/ smallest
   #hasValidChildRelation = (nodeIndex) => {
     const leftChildIndex = this.#getChildIndex(nodeIndex, childPositions.left);
     const rightChildIndex = this.#getChildIndex(nodeIndex, childPositions.right);
 
     if (this.#type === heapTypes.min) {
 
-      if (this.#heap[nodeIndex] > this.#heap[leftChildIndex]) {
-        return leftChildIndex;
+      if (this.#heap[nodeIndex] > this.#heap[leftChildIndex] &&
+        this.#heap[leftChildIndex] <= this.#heap[rightChildIndex]) {
+        return leftChildIndex <= this.#size ? leftChildIndex : true;
       } else if (this.#heap[nodeIndex] > this.#heap[rightChildIndex]) {
-        return rightChildIndex;
+        return rightChildIndex <= this.#size ? rightChildIndex : true;
       }
 
     } else if (this.#type === heapTypes.max) {
 
-      if (this.#heap[nodeIndex] < this.#heap[leftChildIndex]) {
-        return leftChildIndex;
+      if (this.#heap[nodeIndex] < this.#heap[leftChildIndex] &&
+        this.#heap[leftChildIndex] >= this.#heap[rightChildIndex]) {
+        return leftChildIndex <= this.#size ? leftChildIndex : true;
       } else if (this.#heap[nodeIndex] < this.#heap[rightChildIndex]) {
-        return rightChildIndex;
+        return rightChildIndex <= this.#size ? rightChildIndex : true;
       }
 
     }
-    
+
     return true;
   };
 
