@@ -9,9 +9,12 @@ const childPositions = Object.freeze({
 });
 
 /**
- * JavaScript implementation of the data structure Heap, using arrays.
+ * JavaScript implementation of the data structure Heap, using arrays instead of objects.
+ * So the node value is always the respective number in the array.
  * The heap type (min/ max) can be set with the constructor @parameter type.
- * @type {Int}: 1 for min-heap, 2 for max-heap
+ * 
+ * @parameter {Int}: 1 for min-heap, 2 for max-heap
+ * 
  */
 class Heap {
   #type;
@@ -26,6 +29,7 @@ class Heap {
     } else {
       this.#heap = [null];
     }
+
     console.log(`Instantiated a ${this.#type}-heap.`);
   }
 
@@ -181,4 +185,9 @@ class Heap {
   }
 }
 
-export default Heap;
+const heap = new Heap(2, [4, 5, 6, 2, 1, 10, 1, 2, 17, 18]);
+heap.remove(4);
+console.log(heap.content);
+
+
+// export default Heap;
