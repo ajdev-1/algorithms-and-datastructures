@@ -1,11 +1,14 @@
 class SortingRepo {
 
   constructor () {
-    const arr: Array<number> = [0, 8, 1, 6, 9];
-    const res = this.bubbleSort(arr);
+    const arr: Array<number> = [10, 12, 90, 11, 0, 8, 1, 6, 9];
+    const res = this.mergeSort(arr);
     console.log(res);
     console.log('Successfully instantiated a SortingRepo.');
   }
+
+
+  /********** BUBBLE SORT **********/
 
   /**
    * Implementation of the bubble sort algorithm.
@@ -15,7 +18,7 @@ class SortingRepo {
    * @param arr: The array you want to sort.
    * @returns The sorted array, ascending.
    */
-  public bubbleSort (arr: Array<number>): Array<number> {
+  public bubbleSort(arr: Array<number>): Array<number> {
     for (let slowRunner = 0; slowRunner < arr.length; slowRunner++) {
       for (let fastRunner = 0; fastRunner < arr.length; fastRunner++) {
         const itemToCompare = arr[slowRunner];
@@ -38,7 +41,7 @@ class SortingRepo {
    * @param arr: The array you want to sort.
    * @returns The sorted array, ascending.
    */
-  public bubbleSortImproved (arr: Array<number>): Array<number> {
+  public bubbleSortImproved(arr: Array<number>): Array<number> {
     let unsortedArrayLength = arr.length - 1;
 
     do {
@@ -56,6 +59,42 @@ class SortingRepo {
     
     return arr;
   }
+
+  /********** MERGE SORT **********/
+
+  /**
+   * Implementation of the merge sort algorithm.
+   * This sorting algorithm recursively divides the given array into two sides until one
+   * of them is empty (base case). Then each sides are merged with the merge function.
+   * 
+   * @param arr: The array you want to sort.
+   * @returns The sorted array, ascending.
+   */
+  public mergeSort(arr: Array<number>): Array<number> {
+    if (arr.length < 2) return arr;
+
+    const middle: number = Math.floor(arr.length / 2);
+    const leftSide: Array<number> = arr.slice(0, middle);
+    const rightSide: Array<number> = arr.slice(middle, arr.length);
+
+    return this.merge(this.mergeSort(leftSide), this.mergeSort(rightSide));
+  }
+
+  private merge(leftSide: Array<number>, rightSide: Array<number>): Array<number> {
+    let res: Array<number> = [];
+
+    while (leftSide.length && rightSide.length) {
+      if (leftSide[0] <= rightSide[0]) {
+        res.push(leftSide.shift());
+      } else {
+        res.push(rightSide.shift());
+      }
+    }
+    
+    return [...res, ...leftSide, ...rightSide];
+  }
+
+  /********** QUICK SORT **********/
 
   /**
    * Implementation of the quick sort algorithm.
@@ -95,8 +134,8 @@ class SortingRepo {
     return pivotIndex;
   }
 
-  // Helper functions
-  private swap (arr: Array<number>, a: number, b: number): Array<number> {
+  /********** HELPER FUNCTIONS **********/
+  private swap(arr: Array<number>, a: number, b: number): Array<number> {
     if (a === b) return arr;
 
     const tmp: any = arr[a];
